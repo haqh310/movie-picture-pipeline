@@ -74,5 +74,5 @@ jobs:
 
       - name: Push docker image
         run : |
-          cd ./starter/backend && docker run -p 3000:3000 movie-backend:latest
+          cd ./starter/backend && docker run --name movie-backend -p 3000:3000 -d movie-backend
               

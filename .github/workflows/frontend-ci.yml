@@ -72,7 +72,7 @@ jobs:
         run: |
           cd ./starter/frontend && docker build -t movie-frontend:latest . 
 
-      - name: Push docker image
+      - name: Run docker image
         run : |
-          cd ./starter/frontend && docker run -p 3000:3000 movie-frontend:latest
+          cd ./starter/frontend && docker run --name movie-frontend -p 3000:3000 -d movie-frontend
               
