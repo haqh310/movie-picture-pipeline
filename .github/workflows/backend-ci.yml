@@ -24,12 +24,11 @@ jobs:
 
       - name: Install dependencies
         run: | 
-          cd ./starter/backend 
-          python -m pip install --upgrade pip
-          pip install flake8  
+          cd ./starter/backend
+          pipenv install --dev
 
       - name: Runs linting
-        run: cd ./starter/backend && flake8 .
+        run: cd ./starter/backend && pipenv run lint
 
   test-job:
     runs-on: ubuntu-latest
@@ -48,11 +47,10 @@ jobs:
       - name: Install dependencies
         run: | 
           cd ./starter/backend 
-          python -m pip install --upgrade pip
-          pip install Flask Flask Flask-CORS pytest
+          pipenv install --dev
 
       - name: Runs testing
-        run: cd ./starter/backend && pytest
+        run: cd ./starter/backend && pipenv run test
 
   build-job:
     needs: [lint-job, test-job]
@@ -68,7 +66,7 @@ jobs:
         run: |
           cd ./starter/backend && docker build -t movie-backend:latest . 
 
-      - name: Push docker image
+      - name: Run docker image
         run : |
           cd ./starter/backend && docker run --name movie-backend -p 3000:3000 -d movie-backend
               
