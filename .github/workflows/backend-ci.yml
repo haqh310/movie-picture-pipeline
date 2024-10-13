@@ -40,7 +40,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
       
       - name: Install pipenv
         run: pip install pipenv
@@ -49,7 +49,7 @@ jobs:
         run: | 
           cd ./starter/backend 
           python -m pip install --upgrade pip
-          pip install Flask pytest
+          pip install Flask Flask Flask-CORS pytest
 
       - name: Runs testing
         run: cd ./starter/backend && pytest
