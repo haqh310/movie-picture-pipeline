@@ -20,15 +20,15 @@ jobs:
           python-version: '3.12'
       
       - name: Install pipenv
-        run: pip install pipenv
+        run: pip install pipenv --user
 
       - name: Install dependencies
         run: | 
           cd ./starter/backend 
-          pip install pipenv
+          pip install pipenv 
 
       - name: Runs linting
-        run: cd ./starter/backend && pipenv run flake8 .
+        run: cd ./starter/backend && pipenv run lint
 
   test-job:
     runs-on: ubuntu-latest
