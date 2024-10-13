@@ -1,4 +1,4 @@
-name: frontend-ci-workflow
+name: backend-ci-workflow
 
 on:
   workflow_dispatch:
@@ -28,10 +28,10 @@ jobs:
             ${{ runner.os }}-node-
     
       - name: Install dependencies
-        run: cd ./starter/frontend && npm ci
+        run: cd ./starter/backend && npm ci
 
       - name: Runs linting
-        run: cd ./starter/frontend && npm run lint -- --fix
+        run: cd ./starter/backend && npm run lint -- --fix
 
   test-job:
     runs-on: ubuntu-latest
@@ -53,10 +53,10 @@ jobs:
             ${{ runner.os }}-node-
     
       - name: Install dependencies
-        run: cd ./starter/frontend && npm ci
+        run: cd ./starter/backend && npm ci
 
       - name: Runs test
-        run: cd ./starter/frontend && npm run test
+        run: cd ./starter/backend && npm run test
 
   build-job:
     needs: [lint-job, test-job]
@@ -68,17 +68,11 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Build docker image
         run: |
-          cd ./starter/frontend && docker build -t haqh310/movie-frontend:${{ github.sha }} .
+          cd ./starter/backend && docker build -t movie-backend:latest . 
 
       - name: Push docker image
         run : |
-          cd ./starter/frontend && docker push haqh310/movie-frontend:${{ github.sha }}
+          cd ./starter/backend && docker run -p 3000:3000 movie-backend:latest
               
