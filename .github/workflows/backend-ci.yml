@@ -19,11 +19,8 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install Flaske 8
-        run: |
-          cd cd ./starter/backend
-          python -m pip install --upgrade pip
-          pip install flake8
+      - name: Install Flake 8
+        run: cd ./starter/backend && pip install flake8
 
       - name: Runs linting
         run: cd ./starter/backend && npm run lint -- --fix
@@ -39,11 +36,8 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install Flaske 8
-        run: |
-          cd cd ./starter/backend
-          python -m pip install --upgrade pip
-          pip install flake8
+      - name: Install Flake 8
+        run: cd ./starter/backend && pip install flake8
 
       - name: Runs test
         run: cd ./starter/backend && npm run test
