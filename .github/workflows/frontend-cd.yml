@@ -89,11 +89,12 @@ jobs:
           aws-region: us-east-1 
               
       - name: Log in to Amazon ECR
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and Push Docker image to ECR
         env:
-          ECR_REGISTRY: 495761688630.dkr.ecr.us-east-1.amazonaws.com
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: frontend
           IMAGE_TAG: ${{ github.sha }}
         run: |
@@ -107,9 +108,9 @@ jobs:
       - name: Update image in Kustomization
         run: |
           cd starter/frontend/k8s
-          kustomize edit set image frontend=$REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG 
+          kustomize edit set image frontend=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG 
 
       - name: Kustomize build and deploy to Kubernetes
         run: |
           cd starter/frontend/k8s
-          kustomize build | kubectl apply -f . --validate=false
+          kustomize build . | kubectl apply -f . 
