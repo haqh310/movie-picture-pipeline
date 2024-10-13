@@ -49,7 +49,7 @@ jobs:
         run: | 
           cd ./starter/backend 
           python -m pip install --upgrade pip
-          pip install flake8 pytest
+          pip install Flask pytest
 
       - name: Runs testing
         run: cd ./starter/backend && pytest
