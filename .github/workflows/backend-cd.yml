@@ -17,11 +17,14 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install Flake 8
-        run: cd ./starter/backend && pip install flake8
+      - name: Install dependencies
+        run: |
+          cd ./starter/backend
+          python -m pip install --upgrade pip
+          pip install flake8
 
       - name: Runs linting
-        run: cd ./starter/backend && npm run lint -- --fix
+        run: cd ./starter/backend && flake8 .
 
   test-job:
     runs-on: ubuntu-latest
@@ -33,12 +36,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
-      - name: Install Flake 8
-        run: cd ./starter/backend && pip install flake8
-
-      - name: Runs test
-        run: cd ./starter/backend && npm run test
+      
+      - name: Install dependencies
+        run: |
+          cd ./starter/backend
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+      
+      - name: Run test
+        run: cd ./starter/backend && pytest test_app.py
 
   build-job:
     needs: [lint-job, test-job]
