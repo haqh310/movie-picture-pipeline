@@ -2,9 +2,7 @@ name: backend-ci-workflow
 
 on:
   workflow_dispatch:
-  pull_request:
-    types:
-      - closed
+  push:
     branches:
       - main
 jobs:
@@ -55,14 +53,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Build docker image
-        run: |
-          cd ./starter/backend && docker build -t movie-backend:latest . 
-
-      - name: Push docker image
-        run : |
-          cd ./starter/backend && docker run --name movie-backend -p 3000:3000 -d movie-backend
               
