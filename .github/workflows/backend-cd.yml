@@ -100,6 +100,10 @@ jobs:
         run: aws eks update-kubeconfig --name cluster --region us-east-1
 
       - name: Update image in Kustomization
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: backend
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           cd starter/backend/k8s
           kustomize edit set image backend=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG 
@@ -107,6 +111,6 @@ jobs:
       - name: Kustomize build and deploy to Kubernetes
         run: |
           cd starter/backend/k8s
-          kustomize build . | kubectl apply -f . 
+          kustomize build | kubectl apply -f -
   
       
