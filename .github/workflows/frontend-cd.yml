@@ -85,9 +85,6 @@ jobs:
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name cluster --region us-east-1
 
-      - name: get all
-        run: kubectl get svc -A
-
       - name: Get external ip
         id: external_ip
         run: kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'  
@@ -122,7 +119,4 @@ jobs:
       - name: Kustomize build and deploy to Kubernetes
         run: |
           cd starter/frontend/k8s
-          kustomize build | kubectl apply -f -
-
-      - name: get data
-        run: kubectl describe svc frontend
+          kustomize build . | kubectl apply -f -
