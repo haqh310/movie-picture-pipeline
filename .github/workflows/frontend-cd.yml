@@ -82,9 +82,9 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1 
       
-      - name: Get external ip
-        id: external_ip
-        run: kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'  
+     # - name: Get external ip
+     #   id: external_ip
+     #   run: kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'  
       
       - name: Create development server
         run:  |
