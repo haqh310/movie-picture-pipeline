@@ -87,7 +87,8 @@ jobs:
       
       - name: Get external ip
         id: external_ip
-        run: REACT_APP_MOVIE_API_URL = $(kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0]}.hostname')
+        run: |
+          REACT_APP_MOVIE_API_URL=$(kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0]}.hostname')
       
       - name: Get api
         run: |  
