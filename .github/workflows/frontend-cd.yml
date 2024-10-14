@@ -91,7 +91,7 @@ jobs:
       
       - name: Create development server
         run:  |
-         REACT_APP_MOVIE_API_URL= ${{ steps.external_ip.outputs.external_ip }}
+         REACT_APP_MOVIE_API_URL=http://a429c47a42bc04061ad24da8cc554abf-2093303571.us-east-1.elb.amazonaws.com
 
       - name: Log in to Amazon ECR
         id: login-ecr
