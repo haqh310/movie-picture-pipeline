@@ -96,17 +96,13 @@ jobs:
         run:  |
          REACT_APP_MOVIE_API_URL= ${{ steps.external_ip.outputs.external_ip }}
 
-      - name: Build docker image
-        run: |
-          cd ./starter/frontend && docker build --build-arg=REACT_APP_MOVIE_API_URL --tag haqh310/movie-frontend:${{ github.sha }} .
-
-      - name: Push docker image
-        run : |
-          cd ./starter/frontend && docker push haqh310/movie-frontend:${{ github.sha }}
-              
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build docker image
+        run: |
+          cd ./starter/frontend && docker build --build-arg=REACT_APP_MOVIE_API_URL --tag haqh310/movie-frontend:${{ github.sha }} .
 
       - name: Build and Push Docker image to ECR
         env:
