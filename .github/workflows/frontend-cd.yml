@@ -92,7 +92,7 @@ jobs:
       - name: Get api
         run: |  
           REACT_APP_MOVIE_API_URL= ${{ steps.external_ip.outputs.hostname }}
-          echo $REACT_APP_MOVIE_API_URL
+          echo "API=$REACT_APP_MOVIE_API_URL"
 
       - name: Log in to Amazon ECR
         id: login-ecr
