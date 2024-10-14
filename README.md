@@ -1,1 +1,1 @@
-## movie-picture-pipeline = http://ad1df4fd71e144eb4acbe0d99034fea3-1203495371.us-east-1.elb.amazonaws.com/
+## movie-picture-pipeline = http://a9e65e21a44564b9db6bff3e9e9bb03e-253978079.us-east-1.elb.amazonaws.com/

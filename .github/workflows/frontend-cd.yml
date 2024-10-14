@@ -85,12 +85,6 @@ jobs:
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name cluster --region us-east-1
       
-      - name: Get external ip backend
-        id: external_ip
-        run: |
-          HOSTNAME=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-          echo "::set-output name=hostname::$HOSTNAME"
-
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
