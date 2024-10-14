@@ -90,7 +90,7 @@ jobs:
 
       - name: Get external ip
         id: external_ip
-        run: kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+        run: kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress}'
         
       - name: Create development server
         run:  |
