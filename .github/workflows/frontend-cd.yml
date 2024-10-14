@@ -59,7 +59,7 @@ jobs:
         run: cd ./starter/frontend && npm run test
 
   build-job:
-   # needs: [lint-job, test-job]
+    needs: [lint-job, test-job]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -85,15 +85,11 @@ jobs:
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name cluster --region us-east-1
       
-      - name: Get external ip
+      - name: Get external ip backend
         id: external_ip
         run: |
           HOSTNAME=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
           echo "::set-output name=hostname::$HOSTNAME"
-      
-      - name: Get api
-        run: | 
-          echo "hostname=${{ steps.external_ip.outputs.hostname }}"
 
       - name: Log in to Amazon ECR
         id: login-ecr
@@ -104,7 +100,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: frontend
           IMAGE_TAG: ${{ github.sha }}
-          REACT_APP_MOVIE_API_URL: http://aac604641af744b8c8ab45582e491ab1-1172122522.us-east-1.elb.amazonaws.com
+          REACT_APP_MOVIE_API_URL: ${{ steps.external_ip.outputs.hostname }}
         run: |
           cd starter/frontend
           docker build --build-arg REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
