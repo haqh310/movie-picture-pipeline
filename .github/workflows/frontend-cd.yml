@@ -3,6 +3,8 @@ name: frontend-cd-workflow
 on:
   workflow_dispatch:
   push:
+    paths:
+      - 'frontend-cd.yml'
     branches:
       - main
 jobs:
@@ -107,6 +109,14 @@ jobs:
 
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name cluster --region us-east-1
+
+      - name: Get cluster ip
+        id: clusterip
+        run: kubectl get svc -n cluster -o jsonpath='{.spec.clusterIP}'
+
+      - name: Print ClusterIP
+        run: |
+          echo "Cluster IP: ${{ steps.clusterip.outputs.clusterip }}"
       
       - name: Update image in Kustomization
         env:
