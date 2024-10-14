@@ -125,4 +125,4 @@ jobs:
           kustomize build | kubectl apply -f -
 
       - name: get data
-        run: kubectl describe svc -n frontend
+        run: kubectl describe svc frontend
