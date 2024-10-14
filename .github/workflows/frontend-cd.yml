@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '.github/workflows/frontend-cd.yml'
 jobs:
   lint-job:
     runs-on: ubuntu-latest
@@ -85,7 +87,7 @@ jobs:
   
       - name: Get cluster ip
         id: clusterip
-        run: kubectl get svc backend -n cluster -o jsonpath='{.spec.clusterIP}'
+        run: kubectl get svc backend  -o jsonpath='{.spec.clusterIP}'
         
       - name: Create development server
         run: REACT_APP_MOVIE_API_URL= ${{ steps.clusterip.outputs.clusterip }}
