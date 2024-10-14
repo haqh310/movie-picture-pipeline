@@ -87,10 +87,12 @@ jobs:
       
       - name: Get external ip
         id: external_ip
-        run: kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'  
+        run: kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0]}'  
       
       - name: Get api
-        run:  REACT_APP_MOVIE_API_URL= ${{ steps.external_ip.outputs.external_ip }}
+        run: |  
+          REACT_APP_MOVIE_API_URL= ${{ steps.external_ip.outputs.hostname }}
+          echo $REACT_APP_MOVIE_API_URL
 
       - name: Log in to Amazon ECR
         id: login-ecr
@@ -101,7 +103,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: frontend
           IMAGE_TAG: ${{ github.sha }}
-          REACT_APP_MOVIE_API_URL: http://aac604641af744b8c8ab45582e491ab1-1172122522.us-east-1.elb.amazonaws.com
         run: |
           cd starter/frontend
           docker build --build-arg REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
