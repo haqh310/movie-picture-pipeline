@@ -86,11 +86,14 @@ jobs:
         run: aws eks update-kubeconfig --name cluster --region us-east-1
       
       - name: Get external ip
-        run: HOSTNAME=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+        id: external_ip
+        run: |
+          HOSTNAME=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+          echo "::set-output name=hostname::$HOSTNAME"
       
       - name: Get api
         run: | 
-          echo "hostname=$HOSTNAME"
+          echo "hostname=${{ steps.external_ip.outputs.hostname }}"
 
       - name: Log in to Amazon ECR
         id: login-ecr
