@@ -81,14 +81,17 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1 
+            
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --name cluster --region us-east-1
       
-     # - name: Get external ip
-     #   id: external_ip
-     #   run: kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'  
+      - name: Get external ip
+        id: external_ip
+        run: kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'  
       
       - name: Create development server
         run:  |
-          REACT_APP_MOVIE_API_URL=http://a5c4a3463f530412e8604d8b16b66fcd-701452045.us-east-1.elb.amazonaws.com
+          REACT_APP_MOVIE_API_URL=${{ steps.external_ip.outputs.external_ip }}
 
       - name: Log in to Amazon ECR
         id: login-ecr
@@ -101,11 +104,8 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           cd starter/frontend
-          docker build --build-arg=REACT_APP_MOVIE_API_URL -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build --build-arg REACT_APP_MOVIE_API_URL -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-      
-      - name: Update kubeconfig
-        run: aws eks update-kubeconfig --name cluster --region us-east-1
 
       - name: Set image in Kustomization
         env:
