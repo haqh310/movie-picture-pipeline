@@ -71,10 +71,13 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+        
+      - name: Create development server
+        run: REACT_APP_MOVIE_API_URL=https://34F9AB7A61C1252F703ABD9E5012EE9A.gr7.us-east-1.eks.amazonaws.com
 
       - name: Build docker image
         run: |
-          cd ./starter/frontend && docker build -t haqh310/movie-frontend:${{ github.sha }} .
+          cd ./starter/frontend && docker build --build-arg=REACT_APP_MOVIE_API_URL --tag haqh310/movie-frontend:${{ github.sha }} .
 
       - name: Push docker image
         run : |

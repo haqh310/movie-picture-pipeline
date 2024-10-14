@@ -68,11 +68,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: Create development server
+        run: REACT_APP_MOVIE_API_URL=http://localhost:5000
+
       - name: Build docker image
         run: |
-          cd ./starter/frontend && docker build -t movie-frontend:latest . 
+          cd ./starter/frontend && docker build --build-arg=REACT_APP_MOVIE_API_URL --tag=movie-frontend:latest .
 
       - name: Run docker image
         run : |
-          cd ./starter/frontend && docker run --name movie-frontend -p 3000:3000 -d movie-frontend
+          cd ./starter/frontend && run --name movie-frontend -p 3000:3000 -d movie-frontend
               
