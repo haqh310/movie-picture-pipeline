@@ -87,11 +87,11 @@ jobs:
       
       - name: Get external ip
         id: external_ip
-        run: |
-          REACT_APP_MOVIE_API_URL=$(kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0]}.hostname')
+        run: kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0]}.hostname'
       
       - name: Get api
-        run: |  
+        run: | 
+          REACT_APP_MOVIE_API_URL = ${{ steps.external_ip.outputs }}
           echo "API=$REACT_APP_MOVIE_API_URL"
 
       - name: Log in to Amazon ECR
