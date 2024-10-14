@@ -84,9 +84,6 @@ jobs:
       
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name cluster --region us-east-1
-      
-      - name: get all
-        run: kubectl get svc backend
 
       - name: Get external ip
         id: external_ip
@@ -95,7 +92,6 @@ jobs:
       - name: Create development server
         run:  |
          REACT_APP_MOVIE_API_URL= ${{ steps.external_ip.outputs.external_ip }}
-         echo "REACT_APP_MOVIE_API_URL"
 
       - name: Build docker image
         run: |
