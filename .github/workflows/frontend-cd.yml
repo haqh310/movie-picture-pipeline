@@ -84,16 +84,13 @@ jobs:
       
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name cluster --region us-east-1
-          
-      - name: get all cluster
-        run: kubectl get svc -A
       
       - name: Get cluster ip
-        id: clusterip
-        run: kubectl get svc backend  -o jsonpath='{.spec.clusterIP}'
+        id: external_ip
+        run: kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
         
       - name: Create development server
-        run: REACT_APP_MOVIE_API_URL= ${{ steps.clusterip.outputs.clusterip }}
+        run: REACT_APP_MOVIE_API_URL= ${{ steps.external_ip.outputs.external_ip }}
 
       - name: Build docker image
         run: |
