@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - '.github/workflows/frontend-cd.yml'
+      - '.github\workflows\frontend-cd.yml'
     branches:
       - main
 jobs:
@@ -112,11 +112,7 @@ jobs:
 
       - name: Get cluster ip
         id: clusterip
-        run: kubectl get svc -n cluster -o jsonpath='{.spec.clusterIP}'
-
-      - name: Print ClusterIP
-        run: |
-          echo "Cluster IP: ${{ steps.clusterip.outputs.clusterip }}"
+        run: kubectl get svc -A
       
       - name: Update image in Kustomization
         env:
