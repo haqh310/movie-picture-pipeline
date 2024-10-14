@@ -82,16 +82,13 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1 
       
-      - name: Update kubeconfig
-        run: aws eks update-kubeconfig --name cluster --region us-east-1
-
       - name: Get external ip
         id: external_ip
         run: kubectl get svc backend  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'  
       
       - name: Create development server
         run:  |
-         REACT_APP_MOVIE_API_URL=http://a384c21a5d18c4dc79f1063fefc944b8-1829537151.us-east-1.elb.amazonaws.com
+          REACT_APP_MOVIE_API_URL=http://a5c4a3463f530412e8604d8b16b66fcd-701452045.us-east-1.elb.amazonaws.com
 
       - name: Log in to Amazon ECR
         id: login-ecr
@@ -106,8 +103,11 @@ jobs:
           cd starter/frontend
           docker build --build-arg=REACT_APP_MOVIE_API_URL -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-     
-      - name: Update image in Kustomization
+      
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --name cluster --region us-east-1
+
+      - name: Set image in Kustomization
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: frontend
